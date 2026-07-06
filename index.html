@@ -170,7 +170,6 @@
       justify-content: center;
       font-size: 80px;
       transition: transform 0.05s ease;
-      /* አኒሜሽኑን እዚህ ጋ እንጭነዋለን */
       animation: spinIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
     .coin:active {
@@ -236,6 +235,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      cursor: pointer;
     }
     .item-left {
       display: flex;
@@ -255,9 +255,14 @@
       color: #ffd700;
     }
     .check-mark {
-      color: #00ffcc;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
+    }
+    .check-mark.done {
+      color: #00ffcc;
+    }
+    .check-mark.todo {
+      color: #8979a5;
     }
 
     /* የሪፈራል (Ref) ገጽ ስታይል */
@@ -384,9 +389,7 @@
 
   <div class="top-actions">
     <div class="action-pill">🏆 Platinum <span>❯</span></div>
-    <!-- አዲሱ የ Refresh ቁልፍ -->
     <button class="refresh-btn" onclick="triggerRefresh()">🔄</button>
-    <!-- እውነተኛው የ TON Connect ዎሌት ቁልፍ የሚቀመጥበት ቦታ -->
     <div id="ton-connect-btn"></div>
   </div>
 
@@ -395,7 +398,6 @@
   <!-- [EARN PAGE] -->
   <div id="earn-page" class="page active-page">
     <div class="coin-container">
-      <!-- ሳንቲሙ እዚህ ጋር ይገኛል -->
       <div class="coin" id="main-coin" onclick="handleTap()">💰</div>
     </div>
     <div class="energy-bar">⚡ <span id="energy-val">500</span>/500</div>
@@ -410,19 +412,22 @@
     </div>
     
     <div style="width:100%">
-      <div class="item-box">
+      <!-- ታስክ 1: ቴሌግራም ቻናል -->
+      <div class="item-box" onclick="completeTask('tg_task', 'https://t.me/kassa_mining_news', 25000)">
         <div class="item-left">
-          <div class="item-icon-circle">📋</div>
-          <div class="item-text"><h3>Join Our Socials</h3><p>🪙 5 000</p></div>
+          <div class="item-icon-circle">📢</div>
+          <div class="item-text"><h3>Join Kassa News Telegram</h3><p>🪙 +25,000</p></div>
         </div>
-        <div class="check-mark">✓</div>
+        <div class="check-mark todo" id="tg_task-status">➔</div>
       </div>
-      <div class="item-box">
+      
+      <!-- ታስክ 2: ዩቲዩብ ቻናል -->
+      <div class="item-box" onclick="completeTask('yt_task', 'https://youtube.com/@kassatun', 25000)">
         <div class="item-left">
-          <div class="item-icon-circle">📋</div>
-          <div class="item-text"><h3>Join Our YouTube</h3><p>🪙 5 000</p></div>
+          <div class="item-icon-circle">📺</div>
+          <div class="item-text"><h3>Subscribe Our YouTube</h3><p>🪙 +25,000</p></div>
         </div>
-        <div class="check-mark">✓</div>
+        <div class="check-mark todo" id="yt_task-status">➔</div>
       </div>
     </div>
   </div>
@@ -437,11 +442,11 @@
 
     <div class="ref-summary">
       <div>My ref bonus:</div>
-      <div class="val">2 000</div>
+      <div class="val">+5,000 / friend</div>
     </div>
     <div class="ref-summary">
-      <div>My ref:</div>
-      <div class="val">1</div>
+      <div>Friends Invited:</div>
+      <div class="val" id="friends-count">1</div>
     </div>
 
     <div class="invite-link-box">
@@ -456,9 +461,9 @@
     <div class="item-box">
       <div class="item-left">
         <div class="item-icon-circle">🏆</div>
-        <div class="item-text"><h3>Asmamaw Tsega</h3><p>wood | 🪙 0</p></div>
+        <div class="item-text"><h3>Asmamaw Tsega</h3><p>wood | 🪙 450</p></div>
       </div>
-      <div style="color:#e5a93b; font-weight:bold;">+0</div>
+      <div style="color:#e5a93b; font-weight:bold;">+5,000</div>
     </div>
   </div>
 
@@ -507,7 +512,7 @@
   </div>
 
   <script>
-    // 1. መረጃዎችን ከስልኩ ሚሞሪ (localStorage) መጫን ወይም አዲስ መጀመር
+    // 1. መረጃዎችን ከስልኩ ሚሞሪ (localStorage) መጫን
     let currentScore = localStorage.getItem('kassa_score') ? parseInt(localStorage.getItem('kassa_score')) : 417000;
     let energyValue = localStorage.getItem('kassa_energy') ? parseInt(localStorage.getItem('kassa_energy')) : 500;
 
@@ -515,10 +520,11 @@
     const tg = window.Telegram.WebApp;
     tg.expand(); 
 
-    // የተጠቃሚውን ስም ከቴሌግራም ላይ አውጥቶ ሊንኩን ማስተካከል
+    // የተጠቃሚውን እውነተኛ የቴሌግራም መታወቂያ (ID) በመውሰድ የግብዣ ሊንክ መሥራት
+    let botUsername = "kassa_mining_bot"; // ያንተ እውነተኛ የቦት ስም እዚህ ይገባል
     if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
       const userId = tg.initDataUnsafe.user.id;
-      document.getElementById('user-ref-link').innerText = `https://t.me/kassa_mining_bot?start=r_${userId}`;
+      document.getElementById('user-ref-link').innerText = `https://t.me/${botUsername}?start=r_${userId}`;
     }
 
     function handleTap() {
@@ -538,22 +544,46 @@
     function updateUI() {
       document.getElementById('top-score').innerText = (currentScore / 1000).toFixed(2) + "K";
       document.getElementById('energy-val').innerText = energyValue;
+      updateTaskStatuses();
     }
 
-    // ሪፍሬሽ ሲነካ ገጹን እንደ አዲስ የማደስ እና ሳንቲሙን የማሽከርከር ተግባር
+    // የታስክ አሠራር (ተጠቃሚው ሊንኩን ሲጫን ነጥብ ይሸለማል)
+    function completeTask(taskId, url, reward) {
+      let isDone = localStorage.getItem(taskId);
+      if (!isDone) {
+        window.open(url, '_blank'); // ቻናሉን ይከፍታል
+        currentScore += reward; // ነጥብ ይጨምራል
+        localStorage.setItem(taskId, 'completed'); // ታስኩን ይዘጋል
+        saveData();
+        updateUI();
+        alert(`🎉 Congratulations! You received +${reward.toLocaleString()} Kassa coins!`);
+      } else {
+        alert("This task is already completed!");
+      }
+    }
+
+    function updateTaskStatuses() {
+      ['tg_task', 'yt_task'].forEach(id => {
+        if (localStorage.getItem(id) === 'completed') {
+          const el = document.getElementById(`${id}-status`);
+          if (el) {
+            el.innerText = "✓";
+            el.className = "check-mark done";
+          }
+        }
+      });
+    }
+
     function triggerRefresh() {
       const coin = document.getElementById('main-coin');
-      // አኒሜሽኑን በድጋሚ ለማስጀመር ስታይሉን ለጊዜው ማጥፋት
       coin.style.animation = 'none';
       setTimeout(() => {
         coin.style.animation = 'spinIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
       }, 10);
-      
-      // መረጃዎችን እንደገና ማደስ
       updateUI();
     }
 
-    // ኤነርጂ በየጊዜው መሙላት
+    // ኤነርጂ መሙያ
     setInterval(() => {
       if (energyValue < 500) {
         energyValue += 1;
@@ -575,10 +605,10 @@
     function copyLink() {
       const linkText = document.getElementById('user-ref-link').innerText;
       navigator.clipboard.writeText(linkText);
-      alert("Invite link copied to clipboard!");
+      alert("Invite link copied to clipboard! Share it with friends to earn +5,000 points!");
     }
 
-    // 2. እውነተኛ የ TON ዎሌት ማገናኛ ሲስተም (በተስተካከለው የ Vercel ሊንክህ)
+    // እውነተኛ የ TON ዎሌት ማገናኛ ሲስተም
     const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
         manifestUrl: 'https://kassaapp-ten.vercel.app/tonconnect-manifest.json',
         buttonRootId: 'ton-connect-btn'
