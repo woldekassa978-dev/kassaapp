@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kassa Mining</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #1a0b2e 0%, #0c0414 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+        .header {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .score-container {
+            font-size: 32px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .coin-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .main-coin {
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, #f5b041 0%, #b7950b 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 30px #f5b041;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 80px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+        .main-coin:active {
+            transform: scale(0.95);
+        }
+        .energy-container {
+            margin-bottom: 90px;
+            font-size: 18px;
+            color: #f5b041;
+        }
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #150926;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid #2c1a4d;
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+            cursor: pointer;
+        }
+        .nav-item.active {
+            color: #f5b041;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>Kassa Mining</h2>
+        <div class="score-container">
+            <span>🪙</span>
+            <span id="score">0</span>
+        </div>
+    </div>
+
+    <div class="coin-container">
+        <div class="main-coin" id="coin">🪙</div>
+    </div>
+
+    <div class="energy-container">
+        ⚡ <span id="energy">500</span>/500
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-item active">🪙<br>Earn</div>
+        <div class="nav-item">📋<br>Tasks</div>
+        <div class="nav-item">👤<br>Account</div>
+    </div>
+
+    <script>
+        let score = 0;
+        let energy = 500;
+        const scoreEl = document.getElementById('score');
+        const energyEl = document.getElementById('energy');
+        const coinEl = document.getElementById('coin');
+
+        coinEl.addEventListener('click', (e) => {
+            if (energy > 0) {
+                score += 1;
+                energy -= 1;
+                scoreEl.innerText = score;
+                energyEl.innerText = energy;
+
+                const x = e.clientX;
+                const y = e.clientY;
+                const plusOne = document.createElement('div');
+                plusOne.innerText = '+1';
+                plusOne.style.position = 'fixed';
+                plusOne.style.left = `${x}px`;
+                plusOne.style.top = `${y}px`;
+                plusOne.style.color = '#fff';
+                plusOne.style.fontWeight = 'bold';
+                plusOne.style.fontSize = '24px';
+                plusOne.style.animation = 'moveUp 0.5s linear forwards';
+                document.body.appendChild(plusOne);
+
+                setTimeout(() => { plusOne.remove(); }, 500);
+            }
+        });
+
+        setInterval(() => {
+            if (energy < 500) {
+                energy += 1;
+                energyEl.innerText = energy;
+            }
+        }, 1500);
+    </script>
+
+    <style>
+        @keyframes moveUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-50px); opacity: 0; }
+        }
+    </style>
+</body>
+</html>
