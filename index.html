@@ -515,7 +515,11 @@
       }
     }, 2000);
 
-    function navigateTo(pageId) {
+    // አዲሱ የተስተካከለ ኮድ
+const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+    manifestUrl: 'https://kassaapp-ten.vercel.app/tonconnect-manifest.json',
+    buttonRootId: 'ton-connect-btn'
+});
       const allPages = ['earn', 'tasks', 'account', 'skills', 'cashier'];
       allPages.forEach(p => {
         document.getElementById(`${p}-page`).classList.remove('active-page');
