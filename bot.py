@@ -4,7 +4,7 @@ from pymongo import MongoClient
 
 # 1. የቴሌግራም ቦት እና የዳታቤዝ ማገናኛ (Environment Variables)
 BOT_TOKEN = os.getenv("BOT_TOKEN", "YOUR_BOT_TOKEN_HERE")
-MONGO_URI = os.getenv("MONGO_URI", "YOUR_MONGO_URI_HERE")
+mongodb+srv://kassa_admin:Kassa@123@cluster0.enx4srg.mongodb.net/?appName=Cluster0
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
