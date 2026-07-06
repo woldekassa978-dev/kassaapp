@@ -7,7 +7,7 @@
   <style>
     /* መሠረታዊ ገጽታ */
     body {
-      background-color: #110727;
+      background-color: #170b30;
       color: white;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
@@ -19,26 +19,48 @@
       user-select: none;
     }
 
-    /* የላይኛው የነጥብ ማሳያ */
-    .header {
+    /* 1. የላይኛው ቋሚ መረጃ ዞን (ምስል image_fa436a.png መሠረት) */
+    .top-stats-bar {
+      width: 90%;
+      max-width: 400px;
+      background-color: #23153f;
+      border-radius: 14px;
+      padding: 10px;
+      margin-top: 15px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
       text-align: center;
-      margin-top: 30px;
+      font-size: 13px;
+      font-weight: bold;
+      border: 1px solid #36225e;
     }
-    .header h1 {
-      font-size: 24px;
-      margin-bottom: 5px;
-      font-weight: 600;
-    }
-    .score-container {
+    .stat-item {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 42px;
-      font-weight: bold;
-      margin: 10px 0;
+      gap: 4px;
     }
-    .score-icon {
-      margin-right: 10px;
+    .top-actions {
+      width: 90%;
+      max-width: 400px;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      gap: 10px;
+    }
+    .action-pill {
+      background-color: #23153f;
+      border: 1px solid #36225e;
+      padding: 10px 15px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      flex: 1;
     }
 
     /* ገጾችን መቆጣጠሪያ */
@@ -46,105 +68,242 @@
       display: none;
       width: 90%;
       max-width: 400px;
-      margin-top: 20px;
+      margin-top: 15px;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 100px; /* ለታችኛው ማውጫ ክፍተት */
+      margin-bottom: 100px;
     }
     .active-page {
       display: flex;
     }
 
-    /* የሳንቲም (Earn) ገጽ */
+    /* የንዑስ ማውጫዎች ስታይል (Tabs) */
+    .sub-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      width: 100%;
+      background-color: #120826;
+      padding: 5px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #2b1853;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      color: #8979a5;
+      font-size: 14px;
+      font-weight: bold;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    .tab-btn.active {
+      background-color: #23153f;
+      color: white;
+    }
+
+    /* የሳንቲም (Earn) ገጽ ዲዛይን */
     .coin-container {
       margin: 40px 0;
-      position: relative;
     }
     .coin {
-      width: 220px;
-      height: 220px;
+      width: 200px;
+      height: 200px;
       background: linear-gradient(145deg, #ffd700, #b8860b);
       border-radius: 50%;
-      box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+      box-shadow: 0 0 35px rgba(255, 215, 0, 0.5);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 80px;
-      transition: transform 0.1s ease;
+      transition: transform 0.05s ease;
     }
     .coin:active {
       transform: scale(0.95);
     }
-    .energy-container {
-      display: flex;
-      align-items: center;
-      font-size: 18px;
+    .energy-bar {
       color: #ffd700;
-      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
     }
 
-    /* የታስክ እና የሌሎች ገጾች ስታይል */
-    .page-title {
-      font-size: 22px;
-      margin-bottom: 20px;
-      align-self: flex-start;
-    }
-    .list-container {
+    /* የ Boost እና 'Play to Win' ገጽ ዲዛይን (ምስል image_fa4401.png እና image_fa99e3.png) */
+    .banner-box {
       width: 100%;
+      background-color: #23153f;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid #36225e;
+      margin-bottom: 15px;
     }
+    .banner-img {
+      font-size: 60px;
+      margin-bottom: 10px;
+    }
+    .play-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #e5a93b, #b8860b);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    .boost-trigger-btn {
+      background-color: #23153f;
+      border: 1px solid #36225e;
+      padding: 12px;
+      border-radius: 12px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* አጠቃላይ የዝርዝር ሳጥኖች (Items) */
     .item-box {
       background-color: #1f113a;
       border: 1px solid #36225e;
       border-radius: 14px;
       padding: 15px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      width: 100%;
+      box-sizing: border-box;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .item-info h3 {
-      margin: 0 0 5px 0;
-      font-size: 16px;
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .item-info p {
+    .item-icon-circle {
+      font-size: 24px;
+    }
+    .item-text h3 {
+      margin: 0 0 4px 0;
+      font-size: 15px;
+    }
+    .item-text p {
       margin: 0;
-      font-size: 14px;
+      font-size: 13px;
       color: #ffd700;
+    }
+    .check-mark {
+      color: #00ffcc;
+      font-size: 20px;
       font-weight: bold;
     }
-    .action-btn {
-      background: linear-gradient(135deg, #6236ff, #4b26d1);
-      color: white;
+
+    /* የሪፈራል (Ref) ገጽ ስታይል (ምስል image_fa4766.png) */
+    .ref-summary {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 15px;
+      color: #bfaedc;
+    }
+    .ref-summary span.val {
+      color: #00ffcc;
+      font-weight: bold;
+    }
+    .invite-link-box {
+      background-color: #1f113a;
+      border: 1px solid #36225e;
+      border-radius: 14px;
+      padding: 15px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
+    .invite-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .copy-btn {
+      background-color: #4b26d1;
       border: none;
-      padding: 10px 20px;
-      border-radius: 20px;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 10px;
       font-weight: bold;
       cursor: pointer;
     }
-    .action-btn:disabled {
-      background: #2a1b4e;
-      color: #7d7299;
+    .link-text {
+      color: #8979a5;
+      font-size: 12px;
+      margin-top: 8px;
+      word-break: break-all;
     }
 
-    /* የበታች ማውጫ (Navigation Bar - ምስል image_f9cfa2.png ላይ እንዳለው) */
+    /* የ Cashier ገጽ ዲዛይን */
+    .cashier-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      width: 100%;
+      background-color: #120826;
+      padding: 5px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    .cashier-btn {
+      background: none;
+      border: none;
+      color: #8979a5;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 10px 2px;
+      cursor: pointer;
+    }
+    .cashier-btn.active {
+      background-color: #23153f;
+      color: white;
+      border-radius: 10px;
+    }
+    .big-purple-btn {
+      width: 100%;
+      background-color: #4b26d1;
+      color: white;
+      border: none;
+      padding: 16px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 14px;
+      cursor: pointer;
+    }
+
+    /* የበታች ማውጫ (Navigation Bar) */
     .nav-bar {
       position: fixed;
       bottom: 0;
       width: 100%;
-      background-color: #170b30;
+      background-color: #120826;
       display: flex;
       justify-content: space-around;
-      padding: 10px 0;
+      padding: 12px 0;
       border-top: 1px solid #2b1853;
-      z-index: 1000;
     }
     .nav-item {
       display: flex;
       flex-direction: column;
       align-items: center;
       color: #8979a5;
-      text-decoration: none;
       font-size: 12px;
       cursor: pointer;
       flex: 1;
@@ -153,168 +312,198 @@
       color: #ffd700;
     }
     .nav-icon {
-      font-size: 24px;
-      margin-bottom: 4px;
+      font-size: 22px;
+      margin-bottom: 2px;
     }
   </style>
 </head>
 <body>
 
-  <!-- የላይኛው የነጥብ ማሳያ -->
-  <div class="header">
-    <h1>Kassa Mining</h1>
-    <div class="score-container">
-      <span class="score-icon">🪙</span>
-      <span id="score">0</span>
-    </div>
+  <!-- 1. የላይኛው ቋሚ መረጃ ባር (ምስል image_fa436a.png መሠረት) -->
+  <div class="top-stats-bar">
+    <div class="stat-item">🪙 <span id="top-score">417.00K</span></div>
+    <div class="stat-item">🎫 <span>10.00</span></div>
+    <div class="stat-item">💎 <span>0</span></div>
+    <div class="stat-item">🤖 <span>0</span></div>
   </div>
 
-  <!-- 1. EARN ገጽ -->
+  <div class="top-actions">
+    <div class="action-pill">🏆 Platinum <span>❯</span></div>
+    <div class="action-pill" onclick="triggerConnect()">👛 Connect Wallet <span>❯</span></div>
+  </div>
+
+  <!-- ================= ገጾች ================= -->
+
+  <!-- [EARN PAGE] -->
   <div id="earn-page" class="page active-page">
     <div class="coin-container">
-      <div class="coin" onclick="tapCoin()">💰</div>
+      <div class="coin" onclick="handleTap()">💰</div>
     </div>
-    <div class="energy-container">
-      <span>⚡ <span id="energy">500</span>/500</span>
-    </div>
+    <div class="energy-bar">⚡ <span id="energy-val">500</span>/500</div>
   </div>
 
-  <!-- 2. TASKS ገጽ -->
+  <!-- [TASKS PAGE] (ምስል image_fa9987.png መሠረት) -->
   <div id="tasks-page" class="page">
-    <h2 class="page-title">Special Tasks</h2>
-    <div class="list-container">
-      <div class="item-box" id="task1">
-        <div class="item-info">
-          <h3>Join Our Telegram Channel</h3>
-          <p>🪙 +5,000</p>
+    <div class="sub-tabs">
+      <button class="tab-btn active">Special</button>
+      <button class="tab-btn">Leagues</button>
+      <button class="tab-btn">Ref</button>
+    </div>
+    
+    <div style="width:100%">
+      <div class="item-box">
+        <div class="item-left">
+          <div class="item-icon-circle">📋</div>
+          <div class="item-text"><h3>Join Our Socials</h3><p>🪙 5 000</p></div>
         </div>
-        <button class="action-btn" onclick="completeTask('task1', 5000, 'https://t.me/your_channel')">Claim</button>
+        <div class="check-mark">✓</div>
+      </div>
+      <div class="item-box">
+        <div class="item-left">
+          <div class="item-icon-circle">📋</div>
+          <div class="item-text"><h3>Join Our YouTube</h3><p>🪙 5 000</p></div>
+        </div>
+        <div class="check-mark">✓</div>
+      </div>
+      <div class="item-box">
+        <div class="item-left">
+          <div class="item-icon-circle">📋</div>
+          <div class="item-text"><h3>Subscribe To News Channel!</h3><p>🪙 1 000</p></div>
+        </div>
+        <div class="check-mark">✓</div>
+      </div>
+      <div class="item-box">
+        <div class="item-left">
+          <div class="item-icon-circle">📋</div>
+          <div class="item-text"><h3>Be A Part Of Crypto Degen Club!</h3><p>🪙 1 000</p></div>
+        </div>
+        <div class="check-mark">✓</div>
       </div>
     </div>
   </div>
 
-  <!-- 3. ACCOUNT ገጽ (ምስል image_f9cfa2.png ላይ እንዳለው 🐱) -->
+  <!-- [ACCOUNT PAGE] (ምስል image_fa4766.png እና image_fa47c4.png መሠረት) -->
   <div id="account-page" class="page">
-    <h2 class="page-title">My Account</h2>
-    <div class="list-container">
-      <div class="item-box">
-        <div class="item-info">
-          <h3>User Rank</h3>
-          <p>Bronze Miner</p>
-        </div>
+    <div class="sub-tabs">
+      <button class="tab-btn active">Ref</button>
+      <button class="tab-btn">Stats</button>
+      <button class="tab-btn">Settings</button>
+    </div>
+
+    <div class="ref-summary">
+      <div>My ref bonus:</div>
+      <div class="val">2 000</div>
+    </div>
+    <div class="ref-summary">
+      <div>My ref:</div>
+      <div class="val">1</div>
+    </div>
+
+    <div class="invite-link-box">
+      <div class="invite-header">
+        <strong>My invite link:</strong>
+        <button class="copy-btn" onclick="copyLink()">Copy</button>
       </div>
-      <div class="item-box">
-        <div class="item-info">
-          <h3>Total Taps</h3>
-          <p>🎁 Bonus Level Coming Soon</p>
-        </div>
+      <div class="link-text">https://t.me/kassa_mining_bot?start=r_8778111388</div>
+      <div style="margin-top:5px; font-size:12px;">🎁 +2.5k Shares as a first-time gift</div>
+    </div>
+
+    <h3 style="align-self:flex-start; margin-bottom:10px;">My Referrals list:</h3>
+    <div class="item-box">
+      <div class="item-left">
+        <div class="item-icon-circle">🏆</div>
+        <div class="item-text"><h3>Asmamaw Tsega</h3><p>wood | 🪙 0</p></div>
       </div>
+      <div style="color:#e5a93b; font-weight:bold;">+0</div>
     </div>
   </div>
 
-  <!-- 4. SKILLS ገጽ (ምስል image_f9cfa2.png ላይ እንዳለው 🤖) -->
+  <!-- [SKILLS PAGE] (ምስል image_fa4401.png መሠረት) -->
   <div id="skills-page" class="page">
-    <h2 class="page-title">Upgrade Skills</h2>
-    <div class="list-container">
-      <div class="item-box">
-        <div class="item-info">
-          <h3>Multitap (Level 1)</h3>
-          <p>Cost: 🪙 1,000 (+1 per tap)</p>
-        </div>
-        <button class="action-btn" onclick="upgradeSkill(1000)">Upgrade</button>
-      </div>
+    <div class="banner-box">
+      <div class="banner-img">🤖</div>
+      <h3 style="margin:5px 0;">The first skill gaming platform in Telegram & Web3</h3>
+      <p style="font-size:13px; color:#bfaedc; margin:0 0 15px 0;">Monetize your gaming time. Compete in skill-based games, climb the ranks, and win real rewards.</p>
+      <button class="play-btn" onclick="alert('Starting Game...')">Play to Win</button>
     </div>
+
+    <button class="boost-trigger-btn">
+      <span>🔥</span> Boost
+    </button>
   </div>
 
-  <!-- 5. CASHIER ገጽ (ምስል image_f9cfa2.png ላይ እንዳለው 💰) -->
+  <!-- [CASHIER PAGE] -->
   <div id="cashier-page" class="page">
-    <h2 class="page-title">Cashier & Wallet</h2>
-    <div class="list-container">
-      <div class="item-box">
-        <div class="item-info">
-          <h3>Connect Crypto Wallet</h3>
-          <p>Connect your TON wallet</p>
-        </div>
-        <button class="action-btn">Connect</button>
-      </div>
+    <div class="cashier-grid">
+      <button class="cashier-btn active">Deposit<br>wallet</button>
+      <button class="cashier-btn">Deposit<br>address</button>
+      <button class="cashier-btn">Withdraw</button>
+      <button class="cashier-btn">Transaction<br>history</button>
     </div>
+    <button class="big-purple-btn" onclick="triggerConnect()">Connect wallet</button>
   </div>
 
-  <!-- የበታች ማውጫ (Navigation - ምስል image_f9cfa2.png ላይ ባለው ቅደም ተከተል) -->
+  <!-- ================= የበታች ማውጫ ባር ================= -->
   <div class="nav-bar">
-    <div class="nav-item active" id="nav-earn" onclick="switchPage('earn')">
-      <span class="nav-icon">🪙</span>
-      <span>Earn</span>
+    <div class="nav-item active" id="nav-earn" onclick="navigateTo('earn')">
+      <div class="nav-icon">🪙</div><div>Earn</div>
     </div>
-    <div class="nav-item" id="nav-tasks" onclick="switchPage('tasks')">
-      <span class="nav-icon">📋</span>
-      <span>Tasks</span>
+    <div class="nav-item" id="nav-tasks" onclick="navigateTo('tasks')">
+      <div class="nav-icon">📋</div><div>Tasks</div>
     </div>
-    <div class="nav-item" id="nav-account" onclick="switchPage('account')">
-      <span class="nav-icon">🐱</span>
-      <span>Account</span>
+    <div class="nav-item" id="nav-account" onclick="navigateTo('account')">
+      <div class="nav-icon">🐱</div><div>Account</div>
     </div>
-    <div class="nav-item" id="nav-skills" onclick="switchPage('skills')">
-      <span class="nav-icon">🤖</span>
-      <span>Skills</span>
+    <div class="nav-item" id="nav-skills" onclick="navigateTo('skills')">
+      <div class="nav-icon">🤖</div><div>Skills</div>
     </div>
-    <div class="nav-item" id="nav-cashier" onclick="switchPage('cashier')">
-      <span class="nav-icon">💰</span>
-      <span>Cashier</span>
+    <div class="nav-item" id="nav-cashier" onclick="navigateTo('cashier')">
+      <div class="nav-icon">💰</div><div>Cashier</div>
     </div>
   </div>
 
   <script>
-    let score = 0;
-    let energy = 500;
-    let tapValue = 1;
+    let currentScore = 417000;
+    let energyValue = 500;
 
-    function tapCoin() {
-      if (energy >= tapValue) {
-        score += tapValue;
-        energy -= tapValue;
-        document.getElementById('score').innerText = score;
-        document.getElementById('energy').innerText = energy;
+    function handleTap() {
+      if (energyValue > 0) {
+        currentScore += 1;
+        energyValue -= 1;
+        updateUI();
       }
     }
 
+    function updateUI() {
+      // ቁጥሩን በየሺህው ነጥብ (Format) አድርጎ ለማሳየት
+      document.getElementById('top-score').innerText = (currentScore / 1000).toFixed(2) + "K";
+      document.getElementById('energy-val').innerText = energyValue;
+    }
+
+    // በየ 2 ሰከንዱ ኤነርጂ እንዲሞላ
     setInterval(() => {
-      if (energy < 500) {
-        energy += 1;
-        document.getElementById('energy').innerText = energy;
+      if (energyValue < 500) {
+        energyValue += 1;
+        updateUI();
       }
     }, 2000);
 
-    // ገጾችን መቀያየሪያ ፈንክሽን
-    function switchPage(pageName) {
-      const pages = ['earn', 'tasks', 'account', 'skills', 'cashier'];
-      pages.forEach(p => {
+    function navigateTo(pageId) {
+      const allPages = ['earn', 'tasks', 'account', 'skills', 'cashier'];
+      allPages.forEach(p => {
         document.getElementById(`${p}-page`).classList.remove('active-page');
         document.getElementById(`nav-${p}`).classList.remove('active');
       });
-
-      document.getElementById(`${pageName}-page`).classList.add('active-page');
-      document.getElementById(`nav-${pageName}`).classList.add('active');
+      document.getElementById(`${pageId}-page`).classList.add('active-page');
+      document.getElementById(`nav-${pageId}`).classList.add('active');
     }
 
-    function completeTask(taskId, reward, link) {
-      window.open(link, '_blank');
-      score += reward;
-      document.getElementById('score').innerText = score;
-      const button = document.getElementById(taskId).querySelector('.action-btn');
-      button.innerText = '✔️';
-      button.disabled = true;
+    function copyLink() {
+      alert("Invite link copied to clipboard!");
     }
 
-    function upgradeSkill(cost) {
-      if (score >= cost) {
-        score -= cost;
-        tapValue += 1;
-        document.getElementById('score').innerText = score;
-        alert('Skill Upgraded Successfully!');
-      } else {
-        alert('Not enough coins!');
-      }
+    function triggerConnect() {
+      alert("Connecting TON Wallet... Feature launching very soon!");
     }
   </script>
 </body>
