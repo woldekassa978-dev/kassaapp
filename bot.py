@@ -1,6 +1,7 @@
 import os
 import telebot
 from pymongo import MongoClient
+from urllib.parse import quote_plus
 
 # Environment Variables
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
@@ -19,7 +20,6 @@ except Exception as e:
     print(f"❌ Database connection error: {e}")
     users_col = None
 
-# Bot starts
 @bot.message_handler(commands=['start'])
 def start_message(message):
     bot.reply_to(message, "ሰላም! ቦቱ እየሰራ ነው።")
