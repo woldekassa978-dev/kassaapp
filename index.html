@@ -1,154 +1,321 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kassa Mining</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(180deg, #1a0b2e 0%, #0c0414 100%);
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            user-select: none;
-        }
-        .header {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .score-container {
-            font-size: 32px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .coin-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-        .main-coin {
-            width: 220px;
-            height: 220px;
-            background: radial-gradient(circle, #f5b041 0%, #b7950b 100%);
-            border-radius: 50%;
-            box-shadow: 0 0 30px #f5b041;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 80px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.1s ease;
-        }
-        .main-coin:active {
-            transform: scale(0.95);
-        }
-        .energy-container {
-            margin-bottom: 90px;
-            font-size: 18px;
-            color: #f5b041;
-        }
-        .nav-bar {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #150926;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            border-top: 1px solid #2c1a4d;
-        }
-        .nav-item {
-            text-align: center;
-            font-size: 14px;
-            color: #888;
-            cursor: pointer;
-        }
-        .nav-item.active {
-            color: #f5b041;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kassa Mining Bot</title>
+  <style>
+    /* መሠረታዊ ገጽታ */
+    body {
+      background-color: #110727;
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      user-select: none;
+    }
+
+    /* የላይኛው የነጥብ ማሳያ */
+    .header {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .header h1 {
+      font-size: 24px;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+    .score-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .score-icon {
+      margin-right: 10px;
+    }
+
+    /* ገጾችን መቆጣጠሪያ */
+    .page {
+      display: none;
+      width: 90%;
+      max-width: 400px;
+      margin-top: 20px;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 100px; /* ለታችኛው ማውጫ ክፍተት */
+    }
+    .active-page {
+      display: flex;
+    }
+
+    /* የሳንቲም (Earn) ገጽ */
+    .coin-container {
+      margin: 40px 0;
+      position: relative;
+    }
+    .coin {
+      width: 220px;
+      height: 220px;
+      background: linear-gradient(145deg, #ffd700, #b8860b);
+      border-radius: 50%;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      transition: transform 0.1s ease;
+    }
+    .coin:active {
+      transform: scale(0.95);
+    }
+    .energy-container {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      color: #ffd700;
+      margin-top: 20px;
+    }
+
+    /* የታስክ እና የሌሎች ገጾች ስታይል */
+    .page-title {
+      font-size: 22px;
+      margin-bottom: 20px;
+      align-self: flex-start;
+    }
+    .list-container {
+      width: 100%;
+    }
+    .item-box {
+      background-color: #1f113a;
+      border: 1px solid #36225e;
+      border-radius: 14px;
+      padding: 15px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .item-info h3 {
+      margin: 0 0 5px 0;
+      font-size: 16px;
+    }
+    .item-info p {
+      margin: 0;
+      font-size: 14px;
+      color: #ffd700;
+      font-weight: bold;
+    }
+    .action-btn {
+      background: linear-gradient(135deg, #6236ff, #4b26d1);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .action-btn:disabled {
+      background: #2a1b4e;
+      color: #7d7299;
+    }
+
+    /* የበታች ማውጫ (Navigation Bar - ምስል image_f9cfa2.png ላይ እንዳለው) */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #170b30;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-top: 1px solid #2b1853;
+      z-index: 1000;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #8979a5;
+      text-decoration: none;
+      font-size: 12px;
+      cursor: pointer;
+      flex: 1;
+    }
+    .nav-item.active {
+      color: #ffd700;
+    }
+    .nav-icon {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2>Kassa Mining</h2>
-        <div class="score-container">
-            <span>🪙</span>
-            <span id="score">0</span>
-        </div>
+  <!-- የላይኛው የነጥብ ማሳያ -->
+  <div class="header">
+    <h1>Kassa Mining</h1>
+    <div class="score-container">
+      <span class="score-icon">🪙</span>
+      <span id="score">0</span>
     </div>
+  </div>
 
+  <!-- 1. EARN ገጽ -->
+  <div id="earn-page" class="page active-page">
     <div class="coin-container">
-        <div class="main-coin" id="coin">🪙</div>
+      <div class="coin" onclick="tapCoin()">💰</div>
     </div>
-
     <div class="energy-container">
-        ⚡ <span id="energy">500</span>/500
+      <span>⚡ <span id="energy">500</span>/500</span>
     </div>
+  </div>
 
-    <div class="nav-bar">
-        <div class="nav-item active">🪙<br>Earn</div>
-        <div class="nav-item">📋<br>Tasks</div>
-        <div class="nav-item">👤<br>Account</div>
+  <!-- 2. TASKS ገጽ -->
+  <div id="tasks-page" class="page">
+    <h2 class="page-title">Special Tasks</h2>
+    <div class="list-container">
+      <div class="item-box" id="task1">
+        <div class="item-info">
+          <h3>Join Our Telegram Channel</h3>
+          <p>🪙 +5,000</p>
+        </div>
+        <button class="action-btn" onclick="completeTask('task1', 5000, 'https://t.me/your_channel')">Claim</button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        let score = 0;
-        let energy = 500;
-        const scoreEl = document.getElementById('score');
-        const energyEl = document.getElementById('energy');
-        const coinEl = document.getElementById('coin');
+  <!-- 3. ACCOUNT ገጽ (ምስል image_f9cfa2.png ላይ እንዳለው 🐱) -->
+  <div id="account-page" class="page">
+    <h2 class="page-title">My Account</h2>
+    <div class="list-container">
+      <div class="item-box">
+        <div class="item-info">
+          <h3>User Rank</h3>
+          <p>Bronze Miner</p>
+        </div>
+      </div>
+      <div class="item-box">
+        <div class="item-info">
+          <h3>Total Taps</h3>
+          <p>🎁 Bonus Level Coming Soon</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        coinEl.addEventListener('click', (e) => {
-            if (energy > 0) {
-                score += 1;
-                energy -= 1;
-                scoreEl.innerText = score;
-                energyEl.innerText = energy;
+  <!-- 4. SKILLS ገጽ (ምስል image_f9cfa2.png ላይ እንዳለው 🤖) -->
+  <div id="skills-page" class="page">
+    <h2 class="page-title">Upgrade Skills</h2>
+    <div class="list-container">
+      <div class="item-box">
+        <div class="item-info">
+          <h3>Multitap (Level 1)</h3>
+          <p>Cost: 🪙 1,000 (+1 per tap)</p>
+        </div>
+        <button class="action-btn" onclick="upgradeSkill(1000)">Upgrade</button>
+      </div>
+    </div>
+  </div>
 
-                const x = e.clientX;
-                const y = e.clientY;
-                const plusOne = document.createElement('div');
-                plusOne.innerText = '+1';
-                plusOne.style.position = 'fixed';
-                plusOne.style.left = `${x}px`;
-                plusOne.style.top = `${y}px`;
-                plusOne.style.color = '#fff';
-                plusOne.style.fontWeight = 'bold';
-                plusOne.style.fontSize = '24px';
-                plusOne.style.animation = 'moveUp 0.5s linear forwards';
-                document.body.appendChild(plusOne);
+  <!-- 5. CASHIER ገጽ (ምስል image_f9cfa2.png ላይ እንዳለው 💰) -->
+  <div id="cashier-page" class="page">
+    <h2 class="page-title">Cashier & Wallet</h2>
+    <div class="list-container">
+      <div class="item-box">
+        <div class="item-info">
+          <h3>Connect Crypto Wallet</h3>
+          <p>Connect your TON wallet</p>
+        </div>
+        <button class="action-btn">Connect</button>
+      </div>
+    </div>
+  </div>
 
-                setTimeout(() => { plusOne.remove(); }, 500);
-            }
-        });
+  <!-- የበታች ማውጫ (Navigation - ምስል image_f9cfa2.png ላይ ባለው ቅደም ተከተል) -->
+  <div class="nav-bar">
+    <div class="nav-item active" id="nav-earn" onclick="switchPage('earn')">
+      <span class="nav-icon">🪙</span>
+      <span>Earn</span>
+    </div>
+    <div class="nav-item" id="nav-tasks" onclick="switchPage('tasks')">
+      <span class="nav-icon">📋</span>
+      <span>Tasks</span>
+    </div>
+    <div class="nav-item" id="nav-account" onclick="switchPage('account')">
+      <span class="nav-icon">🐱</span>
+      <span>Account</span>
+    </div>
+    <div class="nav-item" id="nav-skills" onclick="switchPage('skills')">
+      <span class="nav-icon">🤖</span>
+      <span>Skills</span>
+    </div>
+    <div class="nav-item" id="nav-cashier" onclick="switchPage('cashier')">
+      <span class="nav-icon">💰</span>
+      <span>Cashier</span>
+    </div>
+  </div>
 
-        setInterval(() => {
-            if (energy < 500) {
-                energy += 1;
-                energyEl.innerText = energy;
-            }
-        }, 1500);
-    </script>
+  <script>
+    let score = 0;
+    let energy = 500;
+    let tapValue = 1;
 
-    <style>
-        @keyframes moveUp {
-            0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(-50px); opacity: 0; }
-        }
-    </style>
+    function tapCoin() {
+      if (energy >= tapValue) {
+        score += tapValue;
+        energy -= tapValue;
+        document.getElementById('score').innerText = score;
+        document.getElementById('energy').innerText = energy;
+      }
+    }
+
+    setInterval(() => {
+      if (energy < 500) {
+        energy += 1;
+        document.getElementById('energy').innerText = energy;
+      }
+    }, 2000);
+
+    // ገጾችን መቀያየሪያ ፈንክሽን
+    function switchPage(pageName) {
+      const pages = ['earn', 'tasks', 'account', 'skills', 'cashier'];
+      pages.forEach(p => {
+        document.getElementById(`${p}-page`).classList.remove('active-page');
+        document.getElementById(`nav-${p}`).classList.remove('active');
+      });
+
+      document.getElementById(`${pageName}-page`).classList.add('active-page');
+      document.getElementById(`nav-${pageName}`).classList.add('active');
+    }
+
+    function completeTask(taskId, reward, link) {
+      window.open(link, '_blank');
+      score += reward;
+      document.getElementById('score').innerText = score;
+      const button = document.getElementById(taskId).querySelector('.action-btn');
+      button.innerText = '✔️';
+      button.disabled = true;
+    }
+
+    function upgradeSkill(cost) {
+      if (score >= cost) {
+        score -= cost;
+        tapValue += 1;
+        document.getElementById('score').innerText = score;
+        alert('Skill Upgraded Successfully!');
+      } else {
+        alert('Not enough coins!');
+      }
+    }
+  </script>
 </body>
 </html>
