@@ -19,4 +19,9 @@ except Exception as e:
     print(f"❌ Database connection error: {e}")
     users_col = None
 
-# አሁን ከዚህ በታች ሌሎች ኮዶችህን መጨመር ትችላለህ
+# Bot starts
+@bot.message_handler(commands=['start'])
+def start_message(message):
+    bot.reply_to(message, "ሰላም! ቦቱ እየሰራ ነው።")
+
+bot.polling()
