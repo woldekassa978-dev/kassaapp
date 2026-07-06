@@ -39,6 +39,7 @@
       font-size: 13px;
       font-weight: bold;
       border: 1px solid #36225e;
+      position: relative;
     }
     .stat-item {
       display: flex;
@@ -46,6 +47,26 @@
       justify-content: center;
       gap: 4px;
     }
+    
+    /* አዲስ የሪፍሬሽ ቁልፍ ስታይል */
+    .refresh-btn {
+      background-color: #36225e;
+      border: 1px solid #4b26d1;
+      color: white;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+    .refresh-btn:active {
+      transform: rotate(180deg);
+    }
+
     .top-actions {
       width: 90%;
       max-width: 400px;
@@ -53,6 +74,7 @@
       justify-content: space-between;
       margin-top: 10px;
       gap: 10px;
+      align-items: center;
     }
     .action-pill {
       background-color: #23153f;
@@ -81,6 +103,7 @@
       align-items: center;
       justify-content: center;
       flex: 1;
+      min-height: 40px;
     }
 
     /* ገጾችን መቆጣጠሪያ */
@@ -128,6 +151,13 @@
     .coin-container {
       margin: 40px 0;
     }
+    
+    /* ሳንቲሙ ሲከፈት የሚያምር ሽክርክሪት (Animation) እንዲያደርግ */
+    @keyframes spinIn {
+      0% { transform: scale(0) rotate(0deg); }
+      100% { transform: scale(1) rotate(360deg); }
+    }
+
     .coin {
       width: 200px;
       height: 200px;
@@ -140,6 +170,8 @@
       justify-content: center;
       font-size: 80px;
       transition: transform 0.05s ease;
+      /* አኒሜሽኑን እዚህ ጋ እንጭነዋለን */
+      animation: spinIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
     .coin:active {
       transform: scale(0.95);
@@ -352,6 +384,8 @@
 
   <div class="top-actions">
     <div class="action-pill">🏆 Platinum <span>❯</span></div>
+    <!-- አዲሱ የ Refresh ቁልፍ -->
+    <button class="refresh-btn" onclick="triggerRefresh()">🔄</button>
     <!-- እውነተኛው የ TON Connect ዎሌት ቁልፍ የሚቀመጥበት ቦታ -->
     <div id="ton-connect-btn"></div>
   </div>
@@ -361,7 +395,8 @@
   <!-- [EARN PAGE] -->
   <div id="earn-page" class="page active-page">
     <div class="coin-container">
-      <div class="coin" onclick="handleTap()">💰</div>
+      <!-- ሳንቲሙ እዚህ ጋር ይገኛል -->
+      <div class="coin" id="main-coin" onclick="handleTap()">💰</div>
     </div>
     <div class="energy-bar">⚡ <span id="energy-val">500</span>/500</div>
   </div>
@@ -478,7 +513,7 @@
 
     // የቴሌግራም ሚኒ አፕሊኬሽን ማስጀመር
     const tg = window.Telegram.WebApp;
-    tg.expand(); // ገጹን ሙሉ እንዲሆን ማድረግ
+    tg.expand(); 
 
     // የተጠቃሚውን ስም ከቴሌግራም ላይ አውጥቶ ሊንኩን ማስተካከል
     if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
@@ -495,7 +530,6 @@
       }
     }
 
-    // መረጃን በቋሚነት ማስቀመጥ (Database/Save System)
     function saveData() {
       localStorage.setItem('kassa_score', currentScore);
       localStorage.setItem('kassa_energy', energyValue);
@@ -504,6 +538,19 @@
     function updateUI() {
       document.getElementById('top-score').innerText = (currentScore / 1000).toFixed(2) + "K";
       document.getElementById('energy-val').innerText = energyValue;
+    }
+
+    // ሪፍሬሽ ሲነካ ገጹን እንደ አዲስ የማደስ እና ሳንቲሙን የማሽከርከር ተግባር
+    function triggerRefresh() {
+      const coin = document.getElementById('main-coin');
+      // አኒሜሽኑን በድጋሚ ለማስጀመር ስታይሉን ለጊዜው ማጥፋት
+      coin.style.animation = 'none';
+      setTimeout(() => {
+        coin.style.animation = 'spinIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+      }, 10);
+      
+      // መረጃዎችን እንደገና ማደስ
+      updateUI();
     }
 
     // ኤነርጂ በየጊዜው መሙላት
@@ -515,11 +562,7 @@
       }
     }, 2000);
 
-  manifestUrl: 'https://kassaapp-ten.vercel.app/tonconnect-manifest.json',
-const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-    manifestUrl: 'https://kassaapp-ten.vercel.app/tonconnect-manifest.json',
-    buttonRootId: 'ton-connect-btn'
-});
+    function navigateTo(pageId) {
       const allPages = ['earn', 'tasks', 'account', 'skills', 'cashier'];
       allPages.forEach(p => {
         document.getElementById(`${p}-page`).classList.remove('active-page');
@@ -535,17 +578,15 @@ const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
       alert("Invite link copied to clipboard!");
     }
 
-    // 2. እውነተኛ የ TON ዎሌት ማገናኛ ሲስተም (Connect Wallet)
+    // 2. እውነተኛ የ TON ዎሌት ማገናኛ ሲስተም (በተስተካከለው የ Vercel ሊንክህ)
     const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-        manifestUrl: 'https://woldekassa978-dev.github.io/kassaapp/tonconnect-manifest.json',
+        manifestUrl: 'https://kassaapp-ten.vercel.app/tonconnect-manifest.json',
         buttonRootId: 'ton-connect-btn'
     });
 
-    // ዎሌቱ ሲገናኝ ሁኔታውን መከታተል
     tonConnectUI.onStatusChange(wallet => {
         const statusBox = document.getElementById('wallet-status-text');
         if (wallet) {
-            // ዎሌቱ በትክክል ሲገናኝ አድራሻውን ማሳየት
             const address = wallet.account.address;
             const shortAddress = address.slice(0, 6) + "..." + address.slice(-6);
             statusBox.innerHTML = `✅ Wallet Connected!<br>Address: <code>${shortAddress}</code>`;
@@ -554,7 +595,6 @@ const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
         }
     });
 
-    // መጀመሪያ ገጹ ሲከፈት መረጃውን ማሳየት
     updateUI();
   </script>
 </body>
