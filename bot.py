@@ -5,6 +5,8 @@ from pymongo import MongoClient
 # 1. የቴሌግራም ቦት እና የዳታቤዝ ማገናኛ (Environment Variables)
 BOT_TOKEN = os.getenv("BOT_TOKEN", "YOUR_BOT_TOKEN_HERE")
 import os
+MONGO_URI = os.environ.get("MONGO_URI")
+MONGO_URI = os.environ.get("MONGO_URI")
 # ... ሌሎች ኮዶች ...
 MONGO_URI = os.getenv("MONGO_URI")
 # ይህ መስመር Render ላይ ያስቀመጥነውን ሊንክ በራሱ ይወስደዋል
