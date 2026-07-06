@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kassa Mining Bot</title>
+  
+  <!-- እውነተኛ የቴሌግራም እና የቶን ዎሌት ማገናኛ ላይብረሪዎች -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+
   <style>
     /* መሠረታዊ ገጽታ */
     body {
@@ -19,7 +24,7 @@
       user-select: none;
     }
 
-    /* 1. የላይኛው ቋሚ መረጃ ዞን (ምስል image_fa436a.png መሠረት) */
+    /* የላይኛው ቋሚ መረጃ ዞን */
     .top-stats-bar {
       width: 90%;
       max-width: 400px;
@@ -60,6 +65,21 @@
       font-size: 14px;
       font-weight: bold;
       cursor: pointer;
+      flex: 1;
+    }
+
+    /* የቶን ዎሌት ማገናኛ ቁልፍ ስታይል */
+    #ton-connect-btn {
+      background-color: #0098ea;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex: 1;
     }
 
@@ -130,7 +150,7 @@
       font-weight: bold;
     }
 
-    /* የ Boost እና 'Play to Win' ገጽ ዲዛይን (ምስል image_fa4401.png እና image_fa99e3.png) */
+    /* የ Boost እና 'Play to Win' ገጽ ዲዛይን */
     .banner-box {
       width: 100%;
       background-color: #23153f;
@@ -208,7 +228,7 @@
       font-weight: bold;
     }
 
-    /* የሪፈራል (Ref) ገጽ ስታይል (ምስል image_fa4766.png) */
+    /* የሪፈራል (Ref) ገጽ ስታይል */
     .ref-summary {
       width: 100%;
       display: flex;
@@ -276,16 +296,19 @@
       color: white;
       border-radius: 10px;
     }
-    .big-purple-btn {
-      width: 100%;
-      background-color: #4b26d1;
-      color: white;
-      border: none;
-      padding: 16px;
-      font-size: 18px;
-      font-weight: bold;
+    
+    /* ዎሌት ማሳያ ቦክስ */
+    .wallet-status-box {
+      background-color: #1f113a;
+      border: 1px solid #36225e;
       border-radius: 14px;
-      cursor: pointer;
+      padding: 15px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #bfaedc;
     }
 
     /* የበታች ማውጫ (Navigation Bar) */
@@ -319,9 +342,9 @@
 </head>
 <body>
 
-  <!-- 1. የላይኛው ቋሚ መረጃ ባር (ምስል image_fa436a.png መሠረት) -->
+  <!-- የላይኛው ቋሚ መረጃ ባር -->
   <div class="top-stats-bar">
-    <div class="stat-item">🪙 <span id="top-score">417.00K</span></div>
+    <div class="stat-item">🪙 <span id="top-score">0.00K</span></div>
     <div class="stat-item">🎫 <span>10.00</span></div>
     <div class="stat-item">💎 <span>0</span></div>
     <div class="stat-item">🤖 <span>0</span></div>
@@ -329,7 +352,8 @@
 
   <div class="top-actions">
     <div class="action-pill">🏆 Platinum <span>❯</span></div>
-    <div class="action-pill" onclick="triggerConnect()">👛 Connect Wallet <span>❯</span></div>
+    <!-- እውነተኛው የ TON Connect ዎሌት ቁልፍ የሚቀመጥበት ቦታ -->
+    <div id="ton-connect-btn"></div>
   </div>
 
   <!-- ================= ገጾች ================= -->
@@ -342,7 +366,7 @@
     <div class="energy-bar">⚡ <span id="energy-val">500</span>/500</div>
   </div>
 
-  <!-- [TASKS PAGE] (ምስል image_fa9987.png መሠረት) -->
+  <!-- [TASKS PAGE] -->
   <div id="tasks-page" class="page">
     <div class="sub-tabs">
       <button class="tab-btn active">Special</button>
@@ -365,24 +389,10 @@
         </div>
         <div class="check-mark">✓</div>
       </div>
-      <div class="item-box">
-        <div class="item-left">
-          <div class="item-icon-circle">📋</div>
-          <div class="item-text"><h3>Subscribe To News Channel!</h3><p>🪙 1 000</p></div>
-        </div>
-        <div class="check-mark">✓</div>
-      </div>
-      <div class="item-box">
-        <div class="item-left">
-          <div class="item-icon-circle">📋</div>
-          <div class="item-text"><h3>Be A Part Of Crypto Degen Club!</h3><p>🪙 1 000</p></div>
-        </div>
-        <div class="check-mark">✓</div>
-      </div>
     </div>
   </div>
 
-  <!-- [ACCOUNT PAGE] (ምስል image_fa4766.png እና image_fa47c4.png መሠረት) -->
+  <!-- [ACCOUNT PAGE] -->
   <div id="account-page" class="page">
     <div class="sub-tabs">
       <button class="tab-btn active">Ref</button>
@@ -404,8 +414,7 @@
         <strong>My invite link:</strong>
         <button class="copy-btn" onclick="copyLink()">Copy</button>
       </div>
-      <div class="link-text">https://t.me/kassa_mining_bot?start=r_8778111388</div>
-      <div style="margin-top:5px; font-size:12px;">🎁 +2.5k Shares as a first-time gift</div>
+      <div class="link-text" id="user-ref-link">https://t.me/kassa_mining_bot?start=r_user</div>
     </div>
 
     <h3 style="align-self:flex-start; margin-bottom:10px;">My Referrals list:</h3>
@@ -418,18 +427,15 @@
     </div>
   </div>
 
-  <!-- [SKILLS PAGE] (ምስል image_fa4401.png መሠረት) -->
+  <!-- [SKILLS PAGE] -->
   <div id="skills-page" class="page">
     <div class="banner-box">
       <div class="banner-img">🤖</div>
       <h3 style="margin:5px 0;">The first skill gaming platform in Telegram & Web3</h3>
       <p style="font-size:13px; color:#bfaedc; margin:0 0 15px 0;">Monetize your gaming time. Compete in skill-based games, climb the ranks, and win real rewards.</p>
-      <button class="play-btn" onclick="alert('Starting Game...')">Play to Win</button>
+      <button class="play-btn">Play to Win</button>
     </div>
-
-    <button class="boost-trigger-btn">
-      <span>🔥</span> Boost
-    </button>
+    <button class="boost-trigger-btn"><span>🔥</span> Boost</button>
   </div>
 
   <!-- [CASHIER PAGE] -->
@@ -440,7 +446,10 @@
       <button class="cashier-btn">Withdraw</button>
       <button class="cashier-btn">Transaction<br>history</button>
     </div>
-    <button class="big-purple-btn" onclick="triggerConnect()">Connect wallet</button>
+    
+    <div class="wallet-status-box" id="wallet-status-text">
+      Please connect your TON wallet using the top button.
+    </div>
   </div>
 
   <!-- ================= የበታች ማውጫ ባር ================= -->
@@ -463,27 +472,45 @@
   </div>
 
   <script>
-    let currentScore = 417000;
-    let energyValue = 500;
+    // 1. መረጃዎችን ከስልኩ ሚሞሪ (localStorage) መጫን ወይም አዲስ መጀመር
+    let currentScore = localStorage.getItem('kassa_score') ? parseInt(localStorage.getItem('kassa_score')) : 417000;
+    let energyValue = localStorage.getItem('kassa_energy') ? parseInt(localStorage.getItem('kassa_energy')) : 500;
+
+    // የቴሌግራም ሚኒ አፕሊኬሽን ማስጀመር
+    const tg = window.Telegram.WebApp;
+    tg.expand(); // ገጹን ሙሉ እንዲሆን ማድረግ
+
+    // የተጠቃሚውን ስም ከቴሌግራም ላይ አውጥቶ ሊንኩን ማስተካከል
+    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      const userId = tg.initDataUnsafe.user.id;
+      document.getElementById('user-ref-link').innerText = `https://t.me/kassa_mining_bot?start=r_${userId}`;
+    }
 
     function handleTap() {
       if (energyValue > 0) {
         currentScore += 1;
         energyValue -= 1;
+        saveData();
         updateUI();
       }
     }
 
+    // መረጃን በቋሚነት ማስቀመጥ (Database/Save System)
+    function saveData() {
+      localStorage.setItem('kassa_score', currentScore);
+      localStorage.setItem('kassa_energy', energyValue);
+    }
+
     function updateUI() {
-      // ቁጥሩን በየሺህው ነጥብ (Format) አድርጎ ለማሳየት
       document.getElementById('top-score').innerText = (currentScore / 1000).toFixed(2) + "K";
       document.getElementById('energy-val').innerText = energyValue;
     }
 
-    // በየ 2 ሰከንዱ ኤነርጂ እንዲሞላ
+    // ኤነርጂ በየጊዜው መሙላት
     setInterval(() => {
       if (energyValue < 500) {
         energyValue += 1;
+        saveData();
         updateUI();
       }
     }, 2000);
@@ -499,12 +526,32 @@
     }
 
     function copyLink() {
+      const linkText = document.getElementById('user-ref-link').innerText;
+      navigator.clipboard.writeText(linkText);
       alert("Invite link copied to clipboard!");
     }
 
-    function triggerConnect() {
-      alert("Connecting TON Wallet... Feature launching very soon!");
-    }
+    // 2. እውነተኛ የ TON ዎሌት ማገናኛ ሲስተም (Connect Wallet)
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+        manifestUrl: 'https://woldekassa978-dev.github.io/kassaapp/tonconnect-manifest.json',
+        buttonRootId: 'ton-connect-btn'
+    });
+
+    // ዎሌቱ ሲገናኝ ሁኔታውን መከታተል
+    tonConnectUI.onStatusChange(wallet => {
+        const statusBox = document.getElementById('wallet-status-text');
+        if (wallet) {
+            // ዎሌቱ በትክክል ሲገናኝ አድራሻውን ማሳየት
+            const address = wallet.account.address;
+            const shortAddress = address.slice(0, 6) + "..." + address.slice(-6);
+            statusBox.innerHTML = `✅ Wallet Connected!<br>Address: <code>${shortAddress}</code>`;
+        } else {
+            statusBox.innerText = "Please connect your TON wallet using the top button.";
+        }
+    });
+
+    // መጀመሪያ ገጹ ሲከፈት መረጃውን ማሳየት
+    updateUI();
   </script>
 </body>
 </html>
