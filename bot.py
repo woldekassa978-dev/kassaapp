@@ -1,20 +1,15 @@
 import os
 import telebot
 from pymongo import MongoClient
-from urllib.parse import quote_plus
 
-# 1. Environment Variables ን ከ Render ማንበብ
+# Environment Variables
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 MONGO_URI = os.environ.get("MONGO_URI")
 
-# 2. ቦቱን ማስጀመር
-if not BOT_TOKEN:
-    print("❌ BOT_TOKEN አልተገኘም!")
-    exit()
-
+# Initialize Bot
 bot = telebot.TeleBot(BOT_TOKEN)
 
-# 3. ዳታቤዝ መገናኘቱን ማረጋገጥ
+# Database connection
 try:
     client = MongoClient(MONGO_URI)
     db = client['kassa_mining_db']
@@ -23,10 +18,9 @@ try:
 except Exception as e:
     print(f"❌ Database connection error: {e}")
 
-# 4. የ /start ትዕዛዝ
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    bot.reply_to(message, "ሰላም! ቦቱ በአሁኑ ሰዓት እየሰራ ነው።")
+    bot.reply_to(message, "ሰላም! ቦቱ እየሰራ ነው።")
 
 print("🚀 Bot is running...")
 bot.polling(none_stop=True)
