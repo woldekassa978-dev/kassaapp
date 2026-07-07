@@ -1,7 +1,7 @@
-# አንድ ሳንቲም የሚያወጣው ብር
-RATE_PER_COIN = 0.05 
-
-def get_real_value(coins):
-    # ሳንቲሙን ወደ ብር ይቀይራል
-    etb_value = coins * RATE_PER_COIN
-    return etb_value
+def daily_mining_update(user_id):
+    # ተጠቃሚው በየቀኑ በራሱ ጊዜ የሚያገኘው የሳንቲም ቦነስ
+    daily_bonus = 50 
+    users_col.update_one(
+        {"user_id": user_id},
+        {"$inc": {"coins": daily_bonus}}
+    )
